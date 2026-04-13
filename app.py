@@ -173,21 +173,43 @@ COLORSCALE_TEAL  = [[0,"#050d1a"],[0.4,"#00403a"],[0.7,"#00806e"],[1,"#00ffcc"]]
 
 # ─── Setup Database ────────────────────────────────────────────────────
 import os
-import gdown
+import requests
 
 def setup_db():
     if not os.path.exists("retail.db"):
         if not os.path.exists("online_retail.csv"):
-            with st.spinner("Downloading dataset dari Google Drive..."):
-                url = "https://drive.google.com/uc?id=1TR9Y5ERDgNGTlAXRNbX0sMQPmucPo-g7&export=download&confirm=t"
-                output = gdown.download(url, "online_retail.csv", quiet=False, fuzzy=True)
-                if output is None:
-                    st.error("Gagal download CSV. Cek link Google Drive.")
+            with st.spinner("Downloading dataset..."):
+                file_id = "1TR9Y5ERDgNGTlAXRNbX0sMQPmucPo-g7"
+                
+                # Handle Google Drive large file confirmation
+                session = requests.Session()
+                url = f"https://drive.google.com/uc?export=download&id={file_id}"
+                response = session.get(url, stream=True)
+                
+                # Cari confirm token untuk file besar
+                token = None
+                for key, value in response.cookies.items():
+                    if key.startswith("download_warning"):
+                        token = value
+                        break
+                
+                if token:
+                    url = f"https://drive.google.com/uc?export=download&id={file_id}&confirm={token}"
+                    response = session.get(url, stream=True)
+                
+                with open("online_retail.csv", "wb") as f:
+                    for chunk in response.iter_content(chunk_size=32768):
+                        if chunk:
+                            f.write(chunk)
+                
+                # Cek file valid
+                size = os.path.getsize("online_retail.csv")
+                if size < 1000:
+                    os.remove("online_retail.csv")
+                    st.error(f"Download gagal, file terlalu kecil ({size} bytes). Cek Google Drive permissions.")
                     st.stop()
-
-        if not os.path.exists("online_retail.csv"):
-            st.error("File online_retail.csv tidak ditemukan.")
-            st.stop()
+                
+                st.success(f"Download selesai ({size/1024/1024:.1f} MB)")
 
         with st.spinner("Building database..."):
             df = pd.read_csv("online_retail.csv", encoding="ISO-8859-1")
@@ -204,7 +226,8 @@ def setup_db():
             conn = sqlite3.connect("retail.db")
             df.to_sql("transactions", conn, if_exists="replace", index=False)
             conn.close()
-            st.success(f"Database siap! {len(df):,} rows dimuat.")
+            st.success(f"Database siap! {len(df):,} rows.")
+
 setup_db()
 
 # ─── Load Data ─────────────────────────────────────────────────────────
