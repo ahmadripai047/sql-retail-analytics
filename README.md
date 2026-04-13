@@ -115,6 +115,7 @@ jupyter notebook sql_case_study.ipynb
 # Atau jalankan dashboard
 streamlit run app.py
 ```
+## Struktur Repo
 
 ```
 sql-retail-analytics/
