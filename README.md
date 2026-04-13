@@ -116,16 +116,15 @@ jupyter notebook sql_case_study.ipynb
 streamlit run app.py
 ```
 
----
-
-## Struktur Repo
+```
 sql-retail-analytics/
-├── sql_case_study.ipynb   ← Notebook utama
 ├── app.py                 ← Streamlit dashboard
+├── sql_case_study.ipynb   ← Notebook utama (15 SQL queries + visualisasi)
 ├── setup_db.py            ← Script generate database SQLite
-├── requirements.txt
+├── requirements.txt       ← Python dependencies
 └── README.md
 
+```
 ---
 
 ## 👤 Author
