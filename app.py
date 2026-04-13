@@ -1119,5 +1119,5 @@ st.markdown("""
 <div style='text-align:center; padding:8px 0;
      font-family:JetBrains Mono,monospace;
      font-size:0.65rem; color:#1a4a5a; letter-spacing:2px;'>
-◈ RETAIL SQL ANALYTICS ◈ MUHAMMAD RIFAI ◈ MT PORTFOLIO ◈
+◈ RETAIL SQL ANALYTICS ◈ MUHAMMAD RIFAI ◈ ANALYTIFAI ◈
 </div>""", unsafe_allow_html=True)
