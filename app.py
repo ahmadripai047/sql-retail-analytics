@@ -178,27 +178,33 @@ import gdown
 def setup_db():
     if not os.path.exists("retail.db"):
         if not os.path.exists("online_retail.csv"):
-            with st.spinner("📥 Downloading dataset..."):
-                gdown.download(
-                    "https://drive.google.com/uc?id=1TR9Y5ERDgNGTlAXRNbX0sMQPmucPo-g7",
-                    "online_retail.csv", quiet=False
-                )
-        df = pd.read_csv("online_retail.csv", encoding="ISO-8859-1")
-        df = df.rename(columns={
-            "Price":       "UnitPrice",
-            "Customer ID": "CustomerID",
-            "Invoice":     "InvoiceNo"
-        })
-        df = df.dropna(subset=["CustomerID"])
-        df = df[df["Quantity"] > 0]
-        df = df[df["UnitPrice"] > 0]
-        df["CustomerID"] = df["CustomerID"].astype(int)
-        df["Revenue"]    = df["Quantity"] * df["UnitPrice"]
-        with st.spinner("⚙️ Building database..."):
+            with st.spinner("Downloading dataset dari Google Drive..."):
+                url = "https://drive.google.com/uc?id=1TR9Y5ERDgNGTlAXRNbX0sMQPmucPo-g7&export=download&confirm=t"
+                output = gdown.download(url, "online_retail.csv", quiet=False, fuzzy=True)
+                if output is None:
+                    st.error("Gagal download CSV. Cek link Google Drive.")
+                    st.stop()
+
+        if not os.path.exists("online_retail.csv"):
+            st.error("File online_retail.csv tidak ditemukan.")
+            st.stop()
+
+        with st.spinner("Building database..."):
+            df = pd.read_csv("online_retail.csv", encoding="ISO-8859-1")
+            df = df.rename(columns={
+                "Price":       "UnitPrice",
+                "Customer ID": "CustomerID",
+                "Invoice":     "InvoiceNo"
+            })
+            df = df.dropna(subset=["CustomerID"])
+            df = df[df["Quantity"] > 0]
+            df = df[df["UnitPrice"] > 0]
+            df["CustomerID"] = df["CustomerID"].astype(int)
+            df["Revenue"]    = df["Quantity"] * df["UnitPrice"]
             conn = sqlite3.connect("retail.db")
             df.to_sql("transactions", conn, if_exists="replace", index=False)
             conn.close()
-
+            st.success(f"Database siap! {len(df):,} rows dimuat.")
 setup_db()
 
 # ─── Load Data ─────────────────────────────────────────────────────────
