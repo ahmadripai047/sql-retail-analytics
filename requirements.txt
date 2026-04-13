@@ -1,4 +1,5 @@
 pandas>=1.5.0
 matplotlib>=3.6.0
+plotly
 jupyter>=1.0.0
 ipykernel>=6.0.0
