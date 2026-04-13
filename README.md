@@ -1,4 +1,12 @@
-# 🛍️ SQL Analytics Case Study — Online Retail
+# SQL Analytics Case Study — Online Retail
+
+## Setup
+
+1. Download dataset dari [Kaggle](https://www.kaggle.com/datasets/mashlyn/online-retail-ii-uci)
+2. Rename file menjadi `online_retail.csv`, letakkan di folder ini
+3. Jalankan: `python setup_db.py`
+4. Buka: `sql_case_study.ipynb`
+
 
 > **"Bagaimana pola revenue, customer behaviour, dan product performance di platform e-commerce selama 12 bulan?"**
 
