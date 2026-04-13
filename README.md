@@ -1,24 +1,19 @@
 # SQL Analytics Case Study — Online Retail
 
-## Setup
-
-1. Download dataset dari [Kaggle](https://www.kaggle.com/datasets/mashlyn/online-retail-ii-uci)
-2. Rename file menjadi `online_retail.csv`, letakkan di folder ini
-3. Jalankan: `python setup_db.py`
-4. Buka: `sql_case_study.ipynb`
-
+[Live Dashboard!](https://sql-retail-analytics.streamlit.app/)
 
 > **"Bagaimana pola revenue, customer behaviour, dan product performance di platform e-commerce selama 12 bulan?"**
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776ab?logo=python&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQL-SQLite-003B57?logo=sqlite&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/Notebook-Jupyter-F37626?logo=jupyter&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-FF4B4B?logo=streamlit&logoColor=white)
 
 ---
 
 ## Business Problem
 
-Retailer e-commerce UK dengan 600+ pelanggan aktif di 10 negara ingin memahami:
+Retailer e-commerce UK dengan 5.878 pelanggan aktif di 41 negara ingin memahami:
 
 1. Negara dan produk mana yang paling menguntungkan?
 2. Bagaimana pola frekuensi pembelian pelanggan?
@@ -29,8 +24,8 @@ Retailer e-commerce UK dengan 600+ pelanggan aktif di 10 negara ingin memahami:
 
 ## Dataset
 
-- **Sumber:** Online Retail UCI — struktur transaksi 12 bulan (Des 2010 – Des 2011)
-- **Volume:** 12.000 transaksi · 654 pelanggan · 30 produk · 10 negara
+- **Sumber:** Online Retail UCI — transaksi 12 bulan (Des 2010 – Des 2011)
+- **Volume:** 805.549 transaksi · 36.969 invoice · 5.878 pelanggan · 4.631 produk · 41 negara
 - **Kolom utama:** `InvoiceNo`, `StockCode`, `Description`, `Quantity`, `InvoiceDate`, `UnitPrice`, `CustomerID`, `Country`, `Revenue`
 - **Tools:** Python + SQLite — semua analisis menggunakan SQL murni
 
@@ -94,7 +89,10 @@ Retailer e-commerce UK dengan 600+ pelanggan aktif di 10 negara ingin memahami:
 
 ---
 
-## Cara Menjalankan
+## Setup Lokal
+
+Dataset otomatis didownload saat pertama kali membuka Streamlit app.
+Untuk menjalankan secara lokal:
 
 ```bash
 # Clone repo
@@ -104,26 +102,29 @@ cd sql-retail-analytics
 # Install dependencies
 pip install -r requirements.txt
 
+# Download dataset dari Kaggle
+# https://www.kaggle.com/datasets/mashlyn/online-retail-ii-uci
+# Rename menjadi online_retail.csv, letakkan di folder ini
+
 # Buat database
 python setup_db.py
 
 # Buka notebook
 jupyter notebook sql_case_study.ipynb
+
+# Atau jalankan dashboard
+streamlit run app.py
 ```
 
 ---
 
 ## Struktur Repo
-
-```
 sql-retail-analytics/
-├── sql_case_study.ipynb   ← Notebook utama (15 SQL queries + visualisasi)
+├── sql_case_study.ipynb   ← Notebook utama
+├── app.py                 ← Streamlit dashboard
 ├── setup_db.py            ← Script generate database SQLite
-├── retail.db              ← SQLite database (auto-generated)
-├── online_retail.csv      ← Dataset sumber
 ├── requirements.txt
 └── README.md
-```
 
 ---
 
