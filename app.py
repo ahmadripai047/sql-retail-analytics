@@ -171,6 +171,36 @@ DANGER= "#ff5050"
 COLORSCALE_OCEAN = [[0,"#050d1a"],[0.3,"#003d5c"],[0.6,"#006d8a"],[0.85,"#00b4cc"],[1,"#00d4ff"]]
 COLORSCALE_TEAL  = [[0,"#050d1a"],[0.4,"#00403a"],[0.7,"#00806e"],[1,"#00ffcc"]]
 
+# ─── Setup Database ────────────────────────────────────────────────────
+import os
+import gdown
+
+def setup_db():
+    if not os.path.exists("retail.db"):
+        if not os.path.exists("online_retail.csv"):
+            with st.spinner("📥 Downloading dataset..."):
+                gdown.download(
+                    "https://drive.google.com/uc?id=1TR9Y5ERDgNGTlAXRNbX0sMQPmucPo-g7",
+                    "online_retail.csv", quiet=False
+                )
+        df = pd.read_csv("online_retail.csv", encoding="ISO-8859-1")
+        df = df.rename(columns={
+            "Price":       "UnitPrice",
+            "Customer ID": "CustomerID",
+            "Invoice":     "InvoiceNo"
+        })
+        df = df.dropna(subset=["CustomerID"])
+        df = df[df["Quantity"] > 0]
+        df = df[df["UnitPrice"] > 0]
+        df["CustomerID"] = df["CustomerID"].astype(int)
+        df["Revenue"]    = df["Quantity"] * df["UnitPrice"]
+        with st.spinner("⚙️ Building database..."):
+            conn = sqlite3.connect("retail.db")
+            df.to_sql("transactions", conn, if_exists="replace", index=False)
+            conn.close()
+
+setup_db()
+
 # ─── Load Data ─────────────────────────────────────────────────────────
 @st.cache_data
 def load_all():
